@@ -15,7 +15,7 @@ The pedestrian request is sampled on the divided clock's rising edge. It stays l
 - **Reset:** the divider uses synchronous reset; control and count registers use asynchronous reset. Reset release synchronization should be considered in a board implementation.
 - **Display decoding:** `BCD7Seg` has no default branch for values 10–15. Its normal upstream BCD converter produces decimal digits, but standalone invalid inputs retain the previous pattern.
 - **Timing and pins:** no explicit board pin locations, I/O standards, or SDC constraints were supplied. Archived timing includes negative setup and pulse-width slack. A successful fitter result is not evidence of timing closure.
-- **Validation scope:** the added regression checks arithmetic, valid decimal display outputs, normal phase cycles, a request during green, and extended red. Original stimulus tests are smoke tests. Full divider duration, physical button behavior, and timing closure require additional validation.
+- **Validation scope:** the author tested the design in ModelSim using the original Verilog stimulus testbenches. Results are inspected manually in waveforms. Full divider duration, physical button behavior, and timing closure require additional validation; no ModelSim rerun was performed during packaging.
 
 ## Build evidence
 

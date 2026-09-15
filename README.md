@@ -4,6 +4,8 @@
 
 Built as an ELEC2665 digital design coursework project for the **Terasic DE10-Lite / Intel MAX 10**, this design connects gate-level arithmetic, counters, control logic, and display decoding into a complete RTL system.
 
+**Language:** Verilog · **Tools:** ModelSim and Intel Quartus · **Target:** DE10-Lite / MAX 10
+
 ## At a glance
 
 - **Four phases:** red → amber → green → amber, repeating automatically.
@@ -31,19 +33,20 @@ flowchart LR
 
 `CoreLogic` carries the two-bit phase and a latched pedestrian request. `CounterUnit` counts upward until it matches the selected terminal value. `Decoder` selects the lamps and subtracts the elapsed count from the phase duration. `BinaryBCD` and `BCD7Seg` convert that result into decimal digits and segment patterns.
 
-**Start reading:** [top-level wiring](rtl/MainCode.v) · [phase and request control](rtl/CoreLogic.v) · [structural counter](rtl/CounterUnit.v) · [automated regression](tb/regression_tb.sv)
+**Start reading:** [top-level wiring](rtl/MainCode.v) · [phase and request control](rtl/CoreLogic.v) · [structural counter](rtl/CounterUnit.v) · [ModelSim testbenches](tb/legacy/)
 
-## Run the simulations
+## Simulation in ModelSim
 
-Install Icarus Verilog (`iverilog` and `vvp`) and Python 3, then run:
+The original design was tested by the author in **ModelSim** using the 14 Verilog testbenches included in `tb/legacy/`. Each bench supplies input stimulus for its corresponding module and stops for waveform inspection.
 
-```sh
-python3 scripts/test.py
-```
+1. Create a ModelSim project and add the design files from `rtl/` and the testbenches from `tb/legacy/`.
+2. Compile the files, then select a testbench such as `CoreLogic_tb` as the simulation top level.
+3. Add the testbench and device-under-test signals to the waveform window.
+4. Run until the testbench reaches `$stop`, then inspect the inputs, state, and outputs.
 
-The runner elaborates the top-level design, runs every original waveform testbench, and executes an additional self-checking regression for arithmetic, decimal display conversion, phase sequencing, and pedestrian extension. GitHub Actions runs the same command on pushes and pull requests.
+Useful starting points are [`CoreLogic_tb.v`](tb/legacy/CoreLogic_tb.v) for phase and pedestrian-request stimulus, [`CounterUnit_tb.v`](tb/legacy/CounterUnit_tb.v) for counter behavior, and [`SevenSegDisplay_tb.v`](tb/legacy/SevenSegDisplay_tb.v) for decimal display conversion.
 
-Original testbenches are preserved in `tb/legacy/`. They provide stimulus for waveform inspection; their completion alone does not establish correctness. In particular, the original divider and top-level tests are too short to observe a full 1 Hz period. The regression drives `CoreLogic` directly to check phase behavior quickly.
+These are stimulus-based tests with manual waveform inspection. The original divider and top-level benches run too briefly to observe a full 1 Hz period; use the core-level bench to inspect phase changes with its faster simulated clock. No ModelSim rerun was performed during repository packaging.
 
 ## Open in Quartus
 
@@ -63,13 +66,10 @@ This repository preserves the original RTL behavior. The [implementation notes](
 ```text
 rtl/                 14 original design modules
 tb/legacy/           14 original stimulus testbenches
-tb/regression_tb.sv  Self-checking behavioral regression
 quartus/             Project settings with portable source paths
-scripts/test.py      Local and CI simulation runner
 docs/                Implementation notes and archived build evidence
-.github/workflows/   Automated simulation
 ```
 
 ## Project context
 
-Developed for ELEC2665 coursework. The original module names and instructional comments are retained. Repository organization, documentation, and automated regression were added for portfolio presentation. No open-source license has been selected; existing notices are preserved.
+Developed for ELEC2665 coursework. The original module names and instructional comments are retained. Repository organization and documentation were added for portfolio presentation. The source and testbenches reflect the original Verilog/ModelSim workflow. No open-source license has been selected; existing notices are preserved.
