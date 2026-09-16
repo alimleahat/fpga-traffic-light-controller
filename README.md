@@ -70,6 +70,3 @@ quartus/             Project settings with portable source paths
 docs/                Implementation notes and archived build evidence
 ```
 
-## Project context
-
-Developed for ELEC2665 coursework. The original module names and instructional comments are retained. Repository organization and documentation were added for portfolio presentation. The source and testbenches reflect the original Verilog/ModelSim workflow. No open-source license has been selected; existing notices are preserved.
